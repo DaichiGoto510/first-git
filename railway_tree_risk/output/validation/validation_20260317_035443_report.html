@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精度検証レポート - 台風Hagibis</title>
+<style>
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; background: #f8f9fa; color: #333; }
+  .header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 24px 32px; }
+  .header h1 { margin: 0; font-size: 1.6em; }
+  .header p { margin: 6px 0 0; opacity: 0.85; font-size: 0.92em; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .metric-card { background: white; border-radius: 10px; padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,.08); text-align: center; }
+  .metric-card .value { font-size: 2em; font-weight: bold; margin: 4px 0; }
+  .metric-card .label { font-size: 0.78em; color: #666; }
+  .section { background: white; border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .section h2 { margin-top: 0; font-size: 1.1em; border-bottom: 2px solid #3498db; padding-bottom: 8px; color: #2c3e50; }
+  .fig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .fig-grid { grid-template-columns: 1fr; } }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+  th { background: #2c3e50; color: white; padding: 8px 12px; text-align: left; }
+  td { padding: 7px 12px; border-bottom: 1px solid #eee; }
+  .note { background: #fffde7; border-left: 4px solid #f39c12; padding: 12px 16px; border-radius: 4px; font-size: 0.88em; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🛤️ 倒木リスクモデル 精度検証レポート</h1>
+  <p>イベント: 台風Hagibis (通過日: 2019-10-12) &nbsp;|&nbsp; 生成日時: 2026-03-17 03:54</p>
+</div>
+<div class="container">
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="label">検証セグメント数</div>
+      <div class="value">20</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">被害セグメント数</div>
+      <div class="value" style="color:#e74c3c">11</div>
+      <div class="label">被害率 55.0%</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Spearman ρ</div>
+      <div class="value" style="color:#f39c12">0.415</div>
+      <div class="label">中程度の相関</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">AUC</div>
+      <div class="value" style="color:#f39c12">0.682</div>
+      <div class="label">良好</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Precision</div>
+      <div class="value">0.692</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Recall</div>
+      <div class="value">0.818</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">F1 スコア</div>
+      <div class="value" style="color:#27ae60">0.750</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">最適リスク閾値</div>
+      <div class="value">49</div>
+      <div class="label">/ 100点</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📊 検証グラフ</h2>
+    <div class="fig-grid">
+      <div><p style='color:#999'>散布図なし</p></div>
+      <div><p style='color:#999'>ROC 曲線なし</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📋 セグメント別結果</h2>
+    <p style="font-size:0.85em;color:#666">
+      被害判定閾値: Δ NDVI ≥ 0.050 &nbsp;|&nbsp;
+      予測閾値 (Youden 最適): リスクスコア ≥ 49
+    </p>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th>セグメントID</th><th>リスクスコア</th><th>Δ NDVI</th>
+        <th>実際の被害</th><th>モデル予測</th><th>一致</th>
+      </tr></thead>
+      <tbody><tr style="background:#fff5f5"><td>seg_0004</td><td>73.9</td><td>0.0528</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#fff5f5"><td>seg_0017</td><td>65.2</td><td>0.0828</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#f5fff5"><td>seg_0008</td><td>62.7</td><td>0.0431</td><td>🟢 なし</td><td>あり</td><td style="text-align:center;font-size:1.1em">✗</td></tr><tr style="background:#fff5f5"><td>seg_0018</td><td>62.7</td><td>0.0681</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#f5fff5"><td>seg_0003</td><td>58.8</td><td>0.0341</td><td>🟢 なし</td><td>あり</td><td style="text-align:center;font-size:1.1em">✗</td></tr><tr style="background:#fff5f5"><td>seg_0019</td><td>56.4</td><td>0.0711</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#f5fff5"><td>seg_0002</td><td>56.3</td><td>0.0469</td><td>🟢 なし</td><td>あり</td><td style="text-align:center;font-size:1.1em">✗</td></tr><tr style="background:#fff5f5"><td>seg_0007</td><td>55.4</td><td>0.0926</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#fff5f5"><td>seg_0014</td><td>53.2</td><td>0.0543</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#fff5f5"><td>seg_0015</td><td>52.7</td><td>0.0827</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#f5fff5"><td>seg_0010</td><td>52.4</td><td>0.0400</td><td>🟢 なし</td><td>あり</td><td style="text-align:center;font-size:1.1em">✗</td></tr><tr style="background:#fff5f5"><td>seg_0011</td><td>50.7</td><td>0.0507</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#fff5f5"><td>seg_0009</td><td>49.0</td><td>0.0684</td><td>🔴 あり</td><td>あり</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#f5fff5"><td>seg_0012</td><td>48.4</td><td>-0.0063</td><td>🟢 なし</td><td>なし</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#fff5f5"><td>seg_0020</td><td>45.6</td><td>0.0520</td><td>🔴 あり</td><td>なし</td><td style="text-align:center;font-size:1.1em">✗</td></tr><tr style="background:#f5fff5"><td>seg_0016</td><td>45.4</td><td>0.0234</td><td>🟢 なし</td><td>なし</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#f5fff5"><td>seg_0001</td><td>42.5</td><td>0.0029</td><td>🟢 なし</td><td>なし</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#fff5f5"><td>seg_0013</td><td>42.3</td><td>0.0723</td><td>🔴 あり</td><td>なし</td><td style="text-align:center;font-size:1.1em">✗</td></tr><tr style="background:#f5fff5"><td>seg_0005</td><td>42.0</td><td>0.0116</td><td>🟢 なし</td><td>なし</td><td style="text-align:center;font-size:1.1em">✓</td></tr><tr style="background:#f5fff5"><td>seg_0006</td><td>38.5</td><td>0.0413</td><td>🟢 なし</td><td>なし</td><td style="text-align:center;font-size:1.1em">✓</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>⚠️ 検証手法の注意事項</h2>
+    <div class="note">
+      <strong>プロキシ検証 (代替検証) の限界:</strong><br>
+      ① NDVI 降下は倒木以外の原因 (落葉・豪雨時の雲影・季節変化) も含みます。<br>
+      ② 台風直後は雲の影響で Sentinel-2 の画像品質が低下する場合があります。<br>
+      ③ 完全な精度評価には現地点検記録との照合が別途必要です。<br><br>
+      <strong>解釈の目安:</strong><br>
+      AUC &gt; 0.75: 実用水準 (優秀) &nbsp;|&nbsp; AUC &gt; 0.60: 有効なモデル &nbsp;|&nbsp; AUC = 0.50: ランダム予測と同等<br>
+      Spearman ρ &gt; 0.40: 中〜強の正の相関 (モデルが被害パターンを捉えている)
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

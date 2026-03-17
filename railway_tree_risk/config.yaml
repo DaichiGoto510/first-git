@@ -1,0 +1,36 @@
+# 鉄道脇倒木リスク推定サービス - 設定ファイル
+
+# 解析対象バッファ幅 (メートル): 鉄道線路からこの距離内の樹木をリスク評価対象とする
+buffer_distance_m: 50
+
+# 分析セグメント長 (メートル): 鉄道路線をこの間隔で分割してリスク評価
+segment_length_m: 500
+
+# 衛星データ取得期間 (日数): 現在から遡る期間
+sentinel2_days: 90   # Sentinel-2: 雲量フィルタリングのため長めに設定
+sentinel1_days: 30   # Sentinel-1: SAR (全天候型)
+
+# Sentinel-2 雲被覆率フィルタ (%)
+cloud_cover_threshold: 20
+
+# リスクスコア重み係数 (合計 = 1.0)
+# 研究文献: Kamimura et al. 2008, Peltola 2006, Mitchell 2013 に基づく
+risk_weights:
+  vegetation_health: 0.25    # NDVI/nVVI による植生健全性 (Sentinel-2)
+  wind_exposure: 0.25        # 地形的風曝露度 (SRTM DEM)
+  slope_stability: 0.20      # 斜面安定性・土壌水分 (DEM + Sentinel-1)
+  canopy_height: 0.20        # 樹高推定 (GEDI / 代替モデル)
+  storm_history: 0.10        # 台風・暴風リスク (地形・海岸距離代替)
+
+# 点検優先度クラス分け (リスクスコア 0-100)
+priority_thresholds:
+  critical: 75    # 緊急点検 (赤)
+  high: 55        # 高優先度 (橙)
+  medium: 35      # 中優先度 (黄)
+  low: 0          # 低優先度 (緑)
+
+# 出力設定
+output:
+  geojson: true
+  csv: true
+  html_map: true
